@@ -1,10 +1,11 @@
 let equation = {
     num1: [],
     num2: [],
-    operation: undefined
+    operation: undefined,
+    result: undefined
 }
 
-function display(input) {
+function display(state) {
     // display will take inputs and display according to the input received
     // since numbers will procedurally get longer or longer with more
     // input, we need to have states to determine what gets shown
@@ -21,10 +22,22 @@ function display(input) {
     // will need to later implement clearing and implicit evaluation
     // also means adding a clearing of the global equation is needed
 
-    let state;
+    const display = document.querySelector('#screen');
 
-    if (equation.operation == undefined) 
-        state = input;
+    switch(state) {
+        case 'num1':
+            display.textContent = equation.num1.join('');
+            break;
+        case 'num2':
+            display.textContent = equation.num2.join('');
+            break;
+        case 'operation':
+            display.textContent = equation.operation;
+            break;
+        case 'equation':
+            display.textContent = equation.result;
+            break;
+    }
 
     
 
@@ -38,20 +51,27 @@ function createNumber() {
     const operand1 = parseInt(equation.num1.join(''));
     const operand2 = parseInt(equation.num2.join(''));
     const operation = equation.operation;
+    let result;
+
     switch (operation) {
         case '+':
             console.log(operand1+operand2);
+            result = operand1+operand2;
             break;
         case '-':
             console.log(operand1-operand2);
+            result = operand1-operand2;
             break;
         case 'x':
             console.log(operand1*operand2);
+            result = operand1*operand2;
             break;
         case '%':
             console.log(operand1/operand2);
+            result = operand1/operand2;
             break;
     }
+    equation.result = result;
 }
 
 function gatherInput(input) {
@@ -75,7 +95,7 @@ function gatherInput(input) {
             createNumber();
             break;
     }
-    //display(state);
+    display(state);
 }
 
 function convertInput(input) {
