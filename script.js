@@ -4,6 +4,36 @@ let equation = {
     operation: undefined
 }
 
+function display(input) {
+    // display will take inputs and display according to the input received
+    // since numbers will procedurally get longer or longer with more
+    // input, we need to have states to determine what gets shown
+
+    // states = num1, operation, num2, result
+    // if operation = undef => state = num1
+    // ->
+    // if operation = undef && input = operation => state = operation
+    // ->
+    // if operation = exist => state = num2
+    // if all = exist && input = '=' => state = result
+
+    // code should not be able to progress to num2 without operation
+    // will need to later implement clearing and implicit evaluation
+    // also means adding a clearing of the global equation is needed
+
+    let state;
+
+    if (equation.operation == undefined) 
+        state = input;
+
+    
+
+
+
+
+
+}
+
 function createNumber() {
     const operand1 = parseInt(equation.num1.join(''));
     const operand2 = parseInt(equation.num2.join(''));
@@ -26,25 +56,47 @@ function createNumber() {
 
 function gatherInput(input) {
     console.log(input);
+    let state = convertInput(input);
+
+    if (state == 'ignore') 
+        return;
+
+    switch (state) {
+        case 'num1':
+            equation.num1.push(input);
+            break;
+        case 'num2':
+            equation.num2.push(input);
+            break;
+        case 'operation':
+            equation.operation = input;
+            break;
+        case 'equation':
+            createNumber();
+            break;
+    }
+    //display(state);
+}
+
+function convertInput(input) {
     if (input >= '0' && input <= '9') 
         if (equation.operation == undefined)
-            equation.num1.push(input);
+            return  'num1';
         else
-            equation.num2.push(input);
+            return  'num2';
     
     if (input == '+' || input == 'x' 
     ||  input == '-' || input == '%') {
-        equation.operation = input;
+        return 'operation'
     }
 
     if (input == '=') {
         if (isEquation) {
-            createNumber();
+            return 'equation'
         }
     }
-    
 
-
+    return 'ignore'
 }
 
 const isEquation = function () {
