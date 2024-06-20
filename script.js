@@ -67,6 +67,10 @@ function createNumber() {
             result = operand1*operand2;
             break;
         case '%':
+            if (operand2 == 0) {
+                result = 'kill yourself';
+                break;
+            }
             console.log(operand1/operand2);
             result = operand1/operand2;
             break;
@@ -99,24 +103,53 @@ function gatherInput(input) {
 }
 
 function convertInput(input) {
-    if (input >= '0' && input <= '9') 
-        if (equation.operation == undefined)
-            return  'num1';
-        else
-            return  'num2';
-    
-    if (input == '+' || input == 'x' 
-    ||  input == '-' || input == '%') {
-        return 'operation'
-    }
+    if (equation.result == undefined) {
+        if (input >= '0' && input <= '9') 
+            if (equation.operation == undefined)
+                return  'num1';
+            else
+                return  'num2';
+        
+        if (input == '+' || input == 'x' 
+        ||  input == '-' || input == '%') {
+            return 'operation';
+        }
 
-    if (input == '=') {
-        if (isEquation) {
-            return 'equation'
+        if (input == '=') {
+            if (isEquation) {
+                return 'equation';
+            }
         }
     }
+    else {
+        if (input >= '0' && input <= '9') {
+            clearEquation();
+            return 'num1';
+        } 
+        if (input == '+' || input == 'x' 
+        ||  input == '-' || input == '%') {
+            clearEquation(1);
+            return 'operation';
+        }
+        if (input == '=')
+            clearEquation();
+    }
+    return 'ignore';
+}
 
-    return 'ignore'
+function clearEquation(flag = 0) {
+    if (flag == 0) {
+        equation.num1.length = 0;
+        equation.num2.length = 0;
+        equation.operation = undefined;
+        equation.result = undefined;
+    }
+    else {
+        equation.num1 = equation.result.toString().split('');
+        equation.num2.length = 0;
+        equation.operation = undefined; 
+        equation.result = undefined;
+    }
 }
 
 const isEquation = function () {
